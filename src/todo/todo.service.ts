@@ -1,9 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { timeEnd } from 'console';
-import { randomUUID } from 'crypto';
 import { Todo } from './todo.entity';
 import { v1 as uuidv1 } from 'uuid';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class TodoService {
@@ -18,20 +15,26 @@ export class TodoService {
     this.todoArray.push(todo);
   }
 
-  findById(id:string){
-      return this.todoArray.find((e) => e.id === id)
-  }
-
-  getTodo(){
-    return this.todoArray
-  }
-
-  removeTodoById(id: string){
-    const found = this.todoArray.find(item=> item.id === id)
-    if(!found){
-     throw new NotFoundException(`Todo with ${id} not found`)
+  findById(id: string) {
+    const found = this.todoArray.find((item) => item.id === id);
+    if (!found) {
+      throw new NotFoundException(`Todo with ${id}`);
     }
-    this.todoArray = this.todoArray.filter(item=> {return item.id !== id})
-    return this.todoArray
+    return this.todoArray.find((e) => e.id === id);
+  }
+
+  getTodo() {
+    return this.todoArray;
+  }
+
+  removeTodoById(id: string) {
+    const found = this.todoArray.find((item) => item.id === id);
+    if (!found) {
+      throw new NotFoundException(`Todo with ${id} not found`);
+    }
+    this.todoArray = this.todoArray.filter((item) => {
+      return item.id !== id;
+    });
+    return this.todoArray;
   }
 }
